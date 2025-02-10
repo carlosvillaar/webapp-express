@@ -6,7 +6,13 @@ const index = (req, res) => {
   FROM movies`;
   connection.query(sql, (err, results) => {
     if (err) res.status(500).json({ error: "query al db fallita" });
-    res.json(results);
+    const movies = results;
+    const getPath = `${req.protocol}://${req.get("host")}/`;
+    const moovieswithimage = movies.map((movie) => ({
+      ...movie,
+      image: movie.image ? getPath + movie.image : null,
+    }));
+    res.json(moovieswithimage);
   });
 };
 
@@ -24,8 +30,6 @@ const show = (req, res) => {
   WHERE R.movie_id = ?
   `;
 
-  const imagePath = "http://localhost:3000/img/movies_cover/";
-
   connection.query(sql, [id], (err, results) => {
     if (err) res.status(500).json({ error: "query al db fallita" });
 
@@ -41,10 +45,10 @@ const show = (req, res) => {
         res.status(404).json({ error: "film non trovato" });
 
       const reviews = results;
-
+      const getPath = `${req.protocol}://${req.get("host")}/`;
       res.json({
         ...moovie,
-        image: imagePath + moovie.title + ".jpg",
+        image: moovie.image ? getPath + moovie.image : null,
         reviews,
       });
     });

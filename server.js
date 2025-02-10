@@ -8,6 +8,11 @@ const port = 3000;
 
 const mooviesRouter = require("./router/moovies");
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 const errorsHandler = require("./middlewares/errorshandlerr");
 
 const notFound = require("./middlewares/notFound");

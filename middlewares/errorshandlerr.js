@@ -3,8 +3,8 @@ const errorsHandler = (err, req, res, next) => {
   res.json({
     message: err.message,
     status: 500,
-    error: "Internal server error"
-  })
+    error: "Internal server error",
+  });
 };
 
 module.exports = errorsHandler;

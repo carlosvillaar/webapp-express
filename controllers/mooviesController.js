@@ -55,7 +55,28 @@ const show = (req, res) => {
   });
 };
 
+const storeReview = (req, res) => {
+  const id = req.params.id;
+
+  const { vote, text, name } = req.body;
+
+  const sql = `
+    INSERT INTO reviews (vote, text, name, movie_id)
+    VALUES (?, ?, ?, ?)
+    `;
+
+  connection.query(sql, [vote, text, name, id], (err, results) => {
+    if (err) res.status(500).json({ error: "query al db fallita" });
+    res.status(201);
+    res.json({
+      message: "recensione aggiunta con successo",
+      id: results.insertId,
+    });
+  });
+};
+
 module.exports = {
   index,
   show,
+  storeReview,
 };
